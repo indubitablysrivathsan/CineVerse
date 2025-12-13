@@ -34,6 +34,9 @@ model Film {
   themes     String?  // e.g. "loneliness,identity"
   pace       String?  // e.g. "slow", "medium"
 
+  festival   String?
+  era        String?
+
   journalEntries JournalEntry[]
   filmMoods      FilmMood[]
 }
