@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  displayName  String
+  createdAt    DateTime @default(now())
+
+  journalEntries JournalEntry[]
+}
+
+model Film {
+  id         Int      @id @default(autoincrement())
+  title      String
+  year       Int?
+  director   String?
+  country    String?
+  language   String?
+  synopsis   String?
+  posterUrl  String?
+  trailerUrl String?
+  tags       String?  // simple comma-separated or JSON-like string
+  createdAt  DateTime @default(now())
+
+  journalEntries JournalEntry[]
+  filmMoods      FilmMood[]
+}
+
+model JournalEntry {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  film       Film?    @relation(fields: [filmId], references: [id])
+  filmId     Int?
+  rating     Int?
+  note       String?
+  watchedOn  DateTime?
+  createdAt  DateTime @default(now())
+
+  journalMood JournalMood?
+}
+
+model FilmMood {
+  id         Int      @id @default(autoincrement())
+  film       Film     @relation(fields: [filmId], references: [id])
+  filmId     Int
+  moodLabel  String
+  confidence Float
+  source     String   // "plot" or "review"
+  updatedAt  DateTime @default(now())
+}
+
+model JournalMood {
+  id             Int          @id @default(autoincrement())
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id])
+  journalEntryId Int @unique
+  moodLabel      String
+  confidence     Float
+  generatedSummary String?
+}
