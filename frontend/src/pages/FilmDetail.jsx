@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchFilmById } from "../lib/api";
+import AddToJournal from "./AddToJournal";
 
 function FilmDetail() {
   const { id } = useParams();
@@ -61,6 +62,7 @@ function FilmDetail() {
           {film.synopsis}
         </p>
       )}
+      <AddToJournal filmId={film.id} />
     </div>
   );
 }
