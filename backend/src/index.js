@@ -12,10 +12,10 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", service: "backend" });
 });
 
-// GET /films?country=&year=&search=
+// GET /films?country=&year=&search=&mood=&festival=&era=&search=
 app.get("/films", async (req, res) => {
   try {
-    const { country, year, search } = req.query;
+    const { country, year, search, mood, festival, era } = req.query;
 
     const where = {};
 
@@ -25,26 +25,36 @@ app.get("/films", async (req, res) => {
 
     if (year) {
       const parsedYear = parseInt(year, 10);
-      if (!isNaN(parsedYear)) {
-        where.year = parsedYear;
-      }
+      if (!isNaN(parsedYear)) where.year = parsedYear;
+    }
+
+    if (mood) {
+      where.moods = { contains: mood, mode: "insensitive" };
+    }
+
+    if (festival) {
+      where.festival = { contains: festival, mode: "insensitive" };
+    }
+
+    if (era) {
+      where.era = { contains: era, mode: "insensitive" };
     }
 
     if (search) {
       where.OR = [
         { title: { contains: search, mode: "insensitive" } },
-        { director: { contains: search, mode: "insensitive" } }
+        { director: { contains: search, mode: "insensitive" } },
       ];
     }
 
     const films = await prisma.film.findMany({
       where,
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
     });
 
     res.json(films);
   } catch (err) {
-    console.error("Error fetching films:", err);
+    console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 });

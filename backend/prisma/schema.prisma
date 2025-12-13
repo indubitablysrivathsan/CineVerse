@@ -29,7 +29,6 @@ model Film {
   trailerUrl String?
   tags       String?  // simple comma-separated or JSON-like string
   createdAt  DateTime @default(now())
-
   moods      String?  // e.g. "melancholic,introspective"
   themes     String?  // e.g. "loneliness,identity"
   pace       String?  // e.g. "slow", "medium"
