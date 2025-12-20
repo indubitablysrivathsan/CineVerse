@@ -40,6 +40,11 @@ model Film {
   filmMoods      FilmMood[]
 }
 
+enum Visibility {
+  PRIVATE
+  PUBLIC
+}
+
 model JournalEntry {
   id         Int      @id @default(autoincrement())
   user       User     @relation(fields: [userId], references: [id])
@@ -50,7 +55,7 @@ model JournalEntry {
   note       String?
   watchedOn  DateTime?
 
-  visibility String   @default("private") // "private" | "public"
+  visibility Visibility  @default(PRIVATE) // "private" | "public"
   createdAt  DateTime @default(now())
 
   journalMood JournalMood?

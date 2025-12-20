@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchFilmById } from "../lib/api";
-import AddToJournal from "./AddToJournal";
+import Navbar from "../components/Navbar";
 
 function FilmDetail() {
   const { id } = useParams();
   const [film, setFilm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
@@ -25,45 +26,71 @@ function FilmDetail() {
   }, [id]);
 
   if (loading) {
-    return <p style={{ padding: "2rem" }}>Loading film…</p>;
+    return (
+      <>
+        <Navbar />
+        <div className="page-center">Loading film…</div>
+      </>
+    );
   }
 
   if (error) {
-    return <p style={{ padding: "2rem", color: "red" }}>{error}</p>;
+    return (
+      <>
+        <Navbar />
+        <div className="page-center error">{error}</div>
+      </>
+    );
   }
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "system-ui" }}>
-      <h1>{film.title}</h1>
+    <>
+      <Navbar />
 
-      <p style={{ opacity: 0.8 }}>
-        {film.year && `${film.year} · `}
-        {film.director}
-      </p>
+      <main className="film-detail-page">
+        <section className="film-content">
+          <img src={film.posterUrl} className="film-img" />
+          <h1 className="film-title">{film.title}</h1>
 
-      <p style={{ opacity: 0.7 }}>
-        {film.country} {film.language && `· ${film.language}`}
-      </p>
+          <div className="film-meta">
+            {film.year && <span>{film.year}</span>}
+            {film.director && <span>· {film.director}</span>}
+          </div>
 
-      {film.moods && (
-        <p style={{ marginTop: "1rem" }}>
-          <strong>Mood:</strong> {film.moods}
-        </p>
-      )}
+          <div className="film-submeta">
+            {film.country}
+            {film.language && <span> · {film.language}</span>}
+          </div>
+          {film.moods && (
+            <div className="film-block">
+              <span className="label">Mood</span>
+              <p>{film.moods}</p>
+            </div>
+          )}
 
-      {film.themes && (
-        <p>
-          <strong>Themes:</strong> {film.themes}
-        </p>
-      )}
+          {film.themes && (
+            <div className="film-block">
+              <span className="label">Themes</span>
+              <p>{film.themes}</p>
+            </div>
+          )}
 
-      {film.synopsis && (
-        <p style={{ marginTop: "1.5rem", maxWidth: "700px" }}>
-          {film.synopsis}
-        </p>
-      )}
-      <AddToJournal filmId={film.id} />
-    </div>
+          {film.synopsis && (
+            <div className="film-block synopsis">
+              <p>{film.synopsis}</p>
+            </div>
+          )}
+
+        <div className="film-actions">
+          <button className="btn-outline"
+            onClick={() => navigate(`/journals/new/${film.id}`)}
+          >
+            Add to Journal
+          </button>
+        </div>
+        </section>
+      </main>
+    </>
   );
 }
 

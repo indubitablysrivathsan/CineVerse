@@ -1,40 +1,38 @@
+
+
 function FilmCard({ film }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "1rem",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        background: "#242424ff",
-      }}
-    >
-      <img 
-        src={film.posterUrl} 
-        style={{width: "100%", aspectRatio: "2/3", borderRadius: "4px", marginBottom: "0.5rem" }} 
-        alt={film.title} 
+    <div className="card">
+      <img
+        src={film.posterUrl}
+        alt={film.title}
+        className="card-image"
       />
 
-      <h3 style={{ marginBottom: "0.25rem" }}>{film.title}</h3>
+      <div className="card-content">
+        <div className="card-title">
+          {film.title}
+        </div>
 
-      <p style={{ fontSize: "0.9rem", opacity: 0.8 }}>
-        {film.year && `${film.year} · `}
-        {film.director}
-      </p>
+        <div className="card-sub">
+          {film.director} • {film.year}
+        </div>
 
-      <p style={{ fontSize: "0.85rem", opacity: 0.7 }}>
-        {film.country} {film.language && `· ${film.language}`}
-      </p>
+        <div className="card-tags">
+          {film.country} • {film.language}
+        </div>
 
-      {film.moods && (
-        <p style={{ fontSize: "0.8rem", marginTop: "0.5rem" }}>
-          <strong>Mood:</strong> {film.moods}
-        </p>
-      )}
+        <div className="card-tags">
+          Tags: {film.tags}
+        </div>
+
+        <div className="card-tags">
+          Mood: {film.moods}
+        </div>
+      </div>
     </div>
   );
 }
 
 export default FilmCard;
+

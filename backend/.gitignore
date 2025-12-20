@@ -1,4 +1,10 @@
 node_modules
 .env
 /src/generated/prisma
+prisma/dev.db
+prisma/*.db
+venv/
+__pycache__/
+dist/
+build/
 

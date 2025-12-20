@@ -1,9 +1,12 @@
+
+
 import { useState } from "react";
-import { loginUser } from "../lib/api";
+import { registerUser } from "../lib/api";
 import { Link, useNavigate } from "react-router-dom";
 
-function Login() {
+function Register() {
   const [email, setEmail] = useState("");
+  const [displayName, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -11,10 +14,10 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const { token, user } = await loginUser({ email, password });
+      const { toke, user } = await registerUser({ email, password });
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
+      
       navigate("/");
     } catch(err) {
       setError(err.message);
@@ -42,6 +45,16 @@ function Login() {
           )}
 
           <input
+            type="displayName"
+            placeholder="Username"
+            value={displayName}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+
+          <div style={{ height: "16px" }} />
+
+          <input
             type="email"
             placeholder="Email"
             value={email}
@@ -62,7 +75,7 @@ function Login() {
           <div style={{ height: "28px" }} />
 
           <button type="submit" className="btn-outline" style={{ width: "100%" }}>
-            LOGIN
+            REGISTER
           </button>
         </form>
 
@@ -74,9 +87,9 @@ function Login() {
             fontSize: "14px",
           }}
         >
-          Don’t have an account yet?{" "}
-          <Link to="/register" className="text-gold">
-            Sign up
+          Already have an account?{" "}
+          <Link to="/login" className="text-gold">
+            Login
           </Link>
         </p>
       </div>
@@ -84,4 +97,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

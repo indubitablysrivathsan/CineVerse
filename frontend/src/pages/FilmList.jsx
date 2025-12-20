@@ -1,25 +1,43 @@
 import { useEffect, useState } from "react";
 import { fetchFilmsWithFilters } from "../lib/api";
 import FilmCard from "../components/FilmCard";
+import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
+import "./theme.css";
 
 function FilmList() {
   const [films, setFilms] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({
-  mood: "",
-  festival: "",
-  era: "",
-});
 
+  /* Draft inputs (typing does NOT trigger search) */
+  const [draftFilters, setDraftFilters] = useState({
+    title: "",
+    director: "",
+    genre: "",
+    language: "",
+    mood: "",
+    festival: "",
+    era: "",
+  });
+
+  /* Applied filters (used for API call) */
+  const [filters, setFilters] = useState({});
+
+  /* Load ALL films on first render */
+  useEffect(() => {
+    setFilters({});
+  }, []);
+
+  /* Fetch films ONLY when filters change */
   useEffect(() => {
     async function load() {
       setLoading(true);
+      setError(null);
       try {
         const data = await fetchFilmsWithFilters(filters);
         setFilms(data);
-      } catch (err) {
+      } catch {
         setError("Failed to load films");
       } finally {
         setLoading(false);
@@ -29,66 +47,122 @@ function FilmList() {
     load();
   }, [filters]);
 
-  if (loading) {
-    return <p style={{ padding: "2rem" }}>Loading films…</p>;
-  }
-
-  if (error) {
-    return <p style={{ padding: "2rem", color: "red" }}>{error}</p>;
+  function handleSearch() {
+    setFilters({ ...draftFilters });
   }
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "system-ui"}}>
-      <h1>CineVerse</h1>
-      <p style={{ opacity: 0.7 }}>
-        CineScope - Arthouse Film Discovery
-      </p>
+    <>
+      {/* NAVBAR */}
+      <Navbar />
 
-      <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem" }}>
-        <input
-            placeholder="Mood (e.g. melancholic)"
-            value={filters.mood}
-            onChange={(e) =>
-            setFilters({ ...filters, mood: e.target.value })
-            }
-        />
+      <main className="container" style={{ paddingTop: "120px" }}>
+        {/* HEADER */}
+        <section className="section">
+          <h1 className="heading-serif">
+            Cine<span className="text-gold">Scope</span>
+          </h1>
+          <p className="text-muted" style={{ maxWidth: "620px" }}>
+            Explore cinema by director, language, movement, and mood — curated
+            beyond algorithms.
+          </p>
 
-        <input
-            placeholder="Festival (e.g. Cannes)"
-            value={filters.festival}
-            onChange={(e) =>
-            setFilters({ ...filters, festival: e.target.value })
-            }
-        />
+          {/* SEARCH PANEL */}
+          <div className="filter-panel">
+            {/* PRIMARY SEARCH */}
+            <div className="filter-row">
+              <input
+                placeholder="Film name"
+                value={draftFilters.title}
+                onChange={(e) =>
+                  setDraftFilters({ ...draftFilters, title: e.target.value })
+                }
+              />
+              <input
+                placeholder="Director"
+                value={draftFilters.director}
+                onChange={(e) =>
+                  setDraftFilters({
+                    ...draftFilters,
+                    director: e.target.value,
+                  })
+                }
+              />
 
-        <input
-            placeholder="Era (e.g. Iranian New Wave)"
-            value={filters.era}
-            onChange={(e) =>
-            setFilters({ ...filters, era: e.target.value })
-            }
-      />
-      </div>
+            {/* SECONDARY SEARCH */}
+              <input
+                placeholder="Genre"
+                value={draftFilters.genre}
+                onChange={(e) =>
+                  setDraftFilters({ ...draftFilters, genre: e.target.value })
+                }
+              />
+              <input
+                placeholder="Language"
+                value={draftFilters.language}
+                onChange={(e) =>
+                  setDraftFilters({
+                    ...draftFilters,
+                    language: e.target.value,
+                  })
+                }
+              />
 
-      <div
-        style={{
-          marginTop: "2rem",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "1rem",
-        }}
-      >
-        {films.map((film) => (
-          <Link
-            key={film.id}
-            to={`/films/${film.id}`}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <FilmCard film={film} />
-          </Link>
-        ))}
-      </div>
-    </div>
+            {/* CURATION FILTERS */}
+              <input
+                placeholder="Mood"
+                value={draftFilters.mood}
+                onChange={(e) =>
+                  setDraftFilters({ ...draftFilters, mood: e.target.value })
+                }
+              />
+              {/* <input
+                placeholder="Festival"
+                value={draftFilters.festival}
+                onChange={(e) =>
+                  setDraftFilters({
+                    ...draftFilters,
+                    festival: e.target.value,
+                  })
+                }
+              />
+              <input
+                placeholder="Era / Movement"
+                value={draftFilters.era}
+                onChange={(e) =>
+                  setDraftFilters({ ...draftFilters, era: e.target.value })
+                }
+              /> */}
+            </div>
+
+            <div className="filter-actions">
+              <button className="btn-outline" onClick={handleSearch}>
+                SEARCH
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* STATUS */}
+        {loading && <p className="text-muted">Loading films…</p>}
+        {error && <p style={{ color: "crimson" }}>{error}</p>}
+
+        {/* FILM GRID */}
+        <section className="section" style={{ paddingTop: "40px" }}>
+          <div className="grid">
+            {films.map((film) => (
+              <Link
+                key={film.id}
+                to={`/films/${film.id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <FilmCard film={film} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
 

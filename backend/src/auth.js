@@ -6,13 +6,16 @@ function generateToken(user) {
   return jwt.sign(
     { id: user.id, email: user.email },
     JWT_SECRET,
-    { expiresIn: "7d" }
+    { expiresIn: "1h" }
   );
 }
 
 function authMiddleware(req, res, next) {
   const header = req.headers.authorization;
-  if (!header) return res.status(401).json({ error: "No token" });
+
+  if (!header) {
+    return next();
+  }
 
   const token = header.split(" ")[1];
   try {
@@ -20,8 +23,15 @@ function authMiddleware(req, res, next) {
     req.user = decoded;
     next();
   } catch {
-    res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({ error: "Invalid token" });
   }
 }
 
-module.exports = { generateToken, authMiddleware };
+function requireAuth(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+}
+
+module.exports = { generateToken, authMiddleware, requireAuth };

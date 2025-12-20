@@ -1,100 +1,133 @@
+import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { addJournalEntry } from "../lib/api";
+import Navbar from "../components/Navbar";
 
-function AddToJournal({ filmId }) {
+function AddToJournal() {
+  const { filmId } = useParams();
   const navigate = useNavigate();
+
   const [rating, setRating] = useState("");
   const [note, setNote] = useState("");
   const [watchedOn, setWatchedOn] = useState("");
-  const [message, setMessage] = useState(null);
+  const [visibility, setVisibility] = useState("PRIVATE");
   const [error, setError] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setMessage(null);
     setError(null);
 
     const token = localStorage.getItem("token");
-
     if (!token) {
       navigate("/login");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:4000/journal", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          filmId,
-          rating,
-          note,
-          watchedOn,
-        }),
+      const created = await addJournalEntry(token, {
+        filmId: Number(filmId),
+        rating,
+        note,
+        watchedOn,
+        visibility,
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to add journal entry");
-      }
-
-      setMessage("Added to journal successfully");
-      setRating("");
-      setNote("");
-      setWatchedOn("");
+      navigate(`/journals/me/${created.id}`);
     } catch (err) {
       setError(err.message);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: "2rem" }}>
-      <h3>Add to Journal</h3>
+    <>
+      <Navbar />
 
-      {message && <p style={{ color: "green" }}>{message}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <main className="journal-form-page">
+        <section>
+        <header className="journal-form-header">
+          <h1>Add Journal Entry</h1>
+          <p className="journals-subtitle">
+            Capture your thoughts about this film
+          </p>
+        </header>
 
-      <div>
-        <label>Rating (1-5)</label>
-        <br />
-        <input
-          type="number"
-          min="1"
-          max="5"
-          value={rating}
-          onChange={e => setRating(Number(e.target.value))}
-          required
-        />
-      </div>
+        {error && <p className="form-error">{error}</p>}
 
-      <div>
-        <label>Note</label>
-        <br />
-        <textarea
-          value={note}
-          onChange={e => setNote(e.target.value)}
-          rows="4"
-          required
-        />
-      </div>
+        <form
+          className="journal-form"
+          onSubmit={handleSubmit}
+        >
+          <label>
+            <span className="form-label">
+              Rating (1–10)
+            </span>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={rating}
+              onChange={(e) =>
+                setRating(Number(e.target.value))
+              }
+              required
+            />
+          </label>
 
-      <div>
-        <label>Watched Date</label>
-        <br />
-        <input
-          type="date"
-          value={watchedOn}
-          onChange={e => setWatchedOn(e.target.value)}
-          required
-        />
-      </div>
+          <label>
+            <span className="form-label">Notes</span>
+            <textarea
+              rows="5"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              required
+            />
+          </label>
 
-      <button type="submit" style={{ marginTop: "1rem" }}>
-        Add to Journal
-      </button>
-    </form>
+          <label>
+            <span className="form-label">
+              Watched On
+            </span>
+            <input
+              type="date"
+              value={watchedOn}
+              onChange={(e) =>
+                setWatchedOn(e.target.value)
+              }
+              required
+            />
+          </label>
+
+          <label>
+            <span className="form-label">
+              Visibility
+            </span>
+            <select
+              value={visibility}
+              onChange={(e) =>
+                setVisibility(e.target.value)
+              }
+            >
+              <option value="PRIVATE">
+                Private
+              </option>
+              <option value="PUBLIC">
+                Public
+              </option>
+            </select>
+          </label>
+
+          <div className="journal-actions">
+            <button
+              type="submit"
+              className="btn-outline"
+            >
+              Save Journal
+            </button>
+          </div>
+        </form>
+        </section>
+      </main>
+    </>
   );
 }
 
