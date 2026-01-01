@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Home() {
   const navigate = useNavigate();
@@ -61,10 +62,7 @@ function Home() {
           </div>
         </div>
       </section>
-
-      {/* <footer>
-        © 2025 CineVerse - Crafted for lovers of cinema
-      </footer> */}
+      <Footer />
     </>
   );
 }

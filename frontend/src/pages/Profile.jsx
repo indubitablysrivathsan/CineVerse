@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import { fetchUser } from "../lib/api";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Profile() {
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
     async function load() {
       try {
         const data = await fetchUser(token);
@@ -21,7 +27,7 @@ function Profile() {
     }
 
     load();
-  }, [token]);
+  }, [token, navigate]);
 
   if (loading) {
     return (
@@ -69,6 +75,7 @@ function Profile() {
           )}
         </section>
       </main>
+      <Footer />
     </>
   );
 }

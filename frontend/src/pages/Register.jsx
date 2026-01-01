@@ -14,10 +14,9 @@ function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const { toke, user } = await registerUser({ email, password });
+      const { token, user } = await registerUser({ email, password, displayName });
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      
       navigate("/");
     } catch(err) {
       setError(err.message);
@@ -45,7 +44,7 @@ function Register() {
           )}
 
           <input
-            type="displayName"
+            type="text"
             placeholder="Username"
             value={displayName}
             onChange={(e) => setUsername(e.target.value)}

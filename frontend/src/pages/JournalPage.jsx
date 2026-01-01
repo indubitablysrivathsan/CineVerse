@@ -8,6 +8,7 @@ import {
   updateJournalVisibility,
 } from "../lib/api";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function JournalPage({ isOwner }) {
   const { id } = useParams();
@@ -46,7 +47,9 @@ function JournalPage({ isOwner }) {
     return (
       <>
         <Navbar />
-        <div className="page-center">Loading journal…</div>
+        <section className="journal-content">
+          <div >Loading journal…</div>
+        </section>
       </>
     );
   }
@@ -55,7 +58,9 @@ function JournalPage({ isOwner }) {
     return (
       <>
         <Navbar />
-        <div className="page-center error">Journal not found.</div>
+        <section className="journal-content">
+          <div className="error">Journal not found.</div>
+        </section>
       </>
     );
   }
@@ -195,6 +200,7 @@ function JournalPage({ isOwner }) {
           )}
         </section>
       </main>
+      <Footer />
     </>
   );
 }

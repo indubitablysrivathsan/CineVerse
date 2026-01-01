@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchFilmsWithFilters } from "../lib/api";
 import FilmCard from "../components/FilmCard";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import "./theme.css";
 
@@ -162,6 +163,7 @@ function FilmList() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

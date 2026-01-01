@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import tmdbLogo from "../assets/tmdb_logo.svg";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-inner">
+        <img src={tmdbLogo} alt="TMDB logo" width="50px" />
         <div className="nav-logo">CineVerse</div>
 
         <div className="nav-links">

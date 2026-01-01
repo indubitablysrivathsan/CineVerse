@@ -42,10 +42,10 @@ router.get("/", async (req, res) => {
     //   where.era = { contains: era, mode: "insensitive" };
     // }
 
-    const films = await prisma.film.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-    });
+    const films = await prisma.$queryRaw`
+      SELECT * FROM "Film"
+      ORDER BY RANDOM()
+    `;
 
     res.json(films);
   } catch (err) {

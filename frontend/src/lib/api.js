@@ -35,11 +35,17 @@ export async function fetchUser(token) {
 }
 
 export async function fetchFilms() {
-  const res = await fetch(`${API_URL}/films`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch films");
+  try {
+    const res = await fetch(`${API_URL}/films`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch films: ${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Error fetching films:", err);
+    throw err;
   }
-  return res.json();
 }
 
 export async function fetchFilmById(id) {

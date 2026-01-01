@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchJournal } from "../lib/api";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Journals() {
   const token = localStorage.getItem("token");
@@ -10,19 +11,24 @@ function Journals() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
     async function load() {
       const data = await fetchJournal(token);
       setEntries(data);
       setLoading(false);
     }
     load();
-  }, [token]);
+  }, [token, navigate]);
 
   if (loading) {
     return (
       <>
         <Navbar />
-        <div className="page-center">Loading journal…</div>
+        <section className="journal-content">
+          <div>Loading journals…</div>
+        </section>
       </>
     );
   }
@@ -93,6 +99,7 @@ function Journals() {
         )}
         </section>
       </main>
+      <Footer />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchCommunityJournals } from "../lib/api";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function ExploreJournals() {
   const [entries, setEntries] = useState([]);
@@ -108,6 +109,7 @@ function ExploreJournals() {
           )}
         </section>
       </main>
+      <Footer />
     </>
   );
 }

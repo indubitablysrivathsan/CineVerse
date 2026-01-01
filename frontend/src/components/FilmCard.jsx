@@ -1,5 +1,3 @@
-
-
 function FilmCard({ film }) {
   return (
     <div className="card">

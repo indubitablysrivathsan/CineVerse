@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { addJournalEntry } from "../lib/api";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function AddToJournal() {
   const { filmId } = useParams();
@@ -127,6 +128,7 @@ function AddToJournal() {
         </form>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

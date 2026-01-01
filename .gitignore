@@ -7,6 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+node_modules
+.env
+/src/generated/prisma
+prisma/dev.db
+prisma/*.db
+venv/
+__pycache__/
+dist/
+build/
+
 node_modules/
 dist
 dist-ssr
