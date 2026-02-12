@@ -11,7 +11,13 @@ const curatedRoutes = require("./routes/curated");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://your-vercel-domain.vercel.app"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(authMiddleware);
 

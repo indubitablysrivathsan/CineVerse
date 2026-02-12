@@ -225,6 +225,20 @@ body {
 }
 
 /* ---- Card Wrapper ---- */
+
+.homecard {
+  height: 300px;
+  width: 280px;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
 .card {
   height: 580px;
   width: 280px;
@@ -258,7 +272,7 @@ body {
   flex-direction: column;
   gap: 6px;
 
-  height: 180px; /* 🔴 HARD LOCK */
+  height: 180px; /* HARD LOCK */
   overflow: hidden;
 }
 

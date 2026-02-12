@@ -5,7 +5,6 @@ const { requireAuth } = require("../auth");
 
 router.get("/", requireAuth, async (req, res) => {
   try {
-    console.log("req.user:", req.user);
 
     if (!req.user || !req.user.id) {
       return res.status(401).json({ error: "Unauthorized" });

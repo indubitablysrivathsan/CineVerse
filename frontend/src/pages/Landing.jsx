@@ -29,7 +29,7 @@ function Home() {
         </p>
 
         <div className="grid">
-          <div className="card">
+          <div className="homecard">
             <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4" alt="Film" />
             <div className="card-content">
               <h3>Silent Geometry</h3>
@@ -37,15 +37,15 @@ function Home() {
             </div>
           </div>
 
-          <div className="card">
-            <img src="https://images.unsplash.com/photo-1517602302552-471fe67acf66" alt="Film" />
+          <div className="homecard">
+            <img src="https://images.unsplash.com/photo-1605806616949-1e87b487fc2f" alt="Film" />
             <div className="card-content">
               <h3>Midnight Frames</h3>
               <p>Noir • Psychological</p>
             </div>
           </div>
 
-          <div className="card">
+          <div className="homecard">
             <img src="https://images.unsplash.com/photo-1502139214982-d0ad755818d8" alt="Film" />
             <div className="card-content">
               <h3>The Still Hour</h3>
@@ -53,7 +53,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="card">
+          <div className="homecard">
             <img src="https://images.unsplash.com/photo-1497032205916-ac775f0649ae" alt="Film" />
             <div className="card-content">
               <h3>Fragments of Light</h3>
