@@ -5,6 +5,8 @@ const router = express.Router();
 // GET /films?country=&year=&search=&mood=&festival=&era=&search=
 router.get("/", async (req, res) => {
   try {
+
+    console.log(req.query);
     const { title, director, genre, language, mood, festival, era } = req.query;
 
     const where = {};
@@ -42,10 +44,14 @@ router.get("/", async (req, res) => {
     //   where.era = { contains: era, mode: "insensitive" };
     // }
 
-    const films = await prisma.$queryRaw`
-      SELECT * FROM "Film"
-      ORDER BY RANDOM()
-    `;
+    const filteredFilms = await prisma.film.findMany({ where });
+
+    const ids = filteredFilms.map(f => f.id);
+    
+    const films = await prisma.$queryRawUnsafe(
+      `SELECT * FROM "Film" WHERE id = ANY($1) ORDER BY RANDOM()`,
+      ids
+    );
 
     res.json(films);
   } catch (err) {

@@ -117,6 +117,7 @@ function FilmList() {
                   setDraftFilters({ ...draftFilters, mood: e.target.value })
                 }
               />
+
               {/* <input
                 placeholder="Festival"
                 value={draftFilters.festival}

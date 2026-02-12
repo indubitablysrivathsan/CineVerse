@@ -71,6 +71,21 @@ export async function fetchFilmsWithFilters(filters = {}) {
   return res.json();
 }
 
+export async function fetchCurated(token) {
+  const res = await fetch(`${API_URL}/curated`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch curated films");
+  }
+
+  return res.json();
+}
+
 export async function fetchJournal(token) {
   const res = await fetch(`${API_URL}/journals`, {
     headers: {

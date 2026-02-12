@@ -4,8 +4,9 @@ const prisma = require("./db");
 const { authMiddleware } = require("./auth");
 const signRoutes = require("./routes/sign");
 const journalRoutes = require("./routes/journals");
-const profileRoutes = require("./routes/profile")
-const filmsRoutes = require("./routes/films")
+const profileRoutes = require("./routes/profile");
+const filmsRoutes = require("./routes/films");
+const curatedRoutes = require("./routes/curated");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -29,6 +30,9 @@ app.use("/profile", profileRoutes);
 
 //journal
 app.use("/journals", journalRoutes);
+
+//curated
+app.use("/curated", curatedRoutes);
 
 app.listen(PORT, () => {
   console.log(`Backend listening on http://localhost:${PORT}`);
